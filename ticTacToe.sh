@@ -2,10 +2,10 @@
 
 echo "Welcome to TicTacToe Problem !!"
 
+board=(1 2 3 4 5 6 7 8 9)
+
 #variable
 counter=0
-
-board=(1 2 3 4 5 6 7 8 9)
 
 #Function to display the board
 function viewBoard(){
@@ -20,9 +20,11 @@ function viewBoard(){
 function checkWhoPlayFirst(){
 	if [[ $((RANDOM % 2)) -eq 0 ]]
 	then
-			sign='X'
+			user='X'
+			computer='O'
 	else
-			sign='O'
+			user='O'
+			computer='X'
 	fi
 }
 
@@ -47,12 +49,14 @@ function playerTurn(){
 				board[position-1]=$1
 				((counter++))
 				viewBoard
-				checkWin
+				checkWin $2 $1
 		else
 				echo "Choose Another Position"
+				playerTurn $1 $2
 		fi
 	else
-		echo "Game Over"
+			echo "Board is Full"
+			exit
 	fi
 	viewBoard
 }
@@ -60,6 +64,7 @@ function playerTurn(){
 #Function to check winning condition for rows and columns
 function checkWin(){
 	j=0
+
 	for((i=0;i<9;i=i+3))
 	do
 		if [[ ${board[((i))]} == ${board[((i+1))]} && ${board[((i+1))]} == ${board[((i+2))]} ]]
@@ -67,12 +72,13 @@ function checkWin(){
 				exit
 		elif [[ ${board[((j))]} == ${board[((j+3))]} && ${board[((j+3))]} == ${board[((j+6))]} ]]
 		then
+
 				exit
 		fi
 		((j++))
 	done
-	checkDiagonal $sign
-	playerTurn  $sign
+	checkDiagonal $2 $1
+	playerTurn $2 $1
 }
 
 #Function to check diagonal for user win
@@ -84,11 +90,17 @@ function checkDiagonal(){
 	then
 			exit
 	else
-			playerTurn $sign
+			playerTurn $2 $1
 	fi
 }
 
 #Start Game
 viewBoard
 checkWhoPlayFirst
-playerTurn $sign
+
+if [[ $user == 'X' ]]
+then
+	playerTurn $user $computer
+else
+	playerTurn $computer $user
+fi
