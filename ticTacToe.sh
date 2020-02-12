@@ -77,6 +77,8 @@ function computerTurn(){
 			userTurn $2 $1
 			checkCenter $1
 			userTurn $2 $1
+			checkSide $1
+			userTurn $2 $1
 		else
 			userTurn $2 $1
 		fi
@@ -85,6 +87,17 @@ function computerTurn(){
 			exit
 	fi
 	viewBoard
+}
+
+#Function to check sides is available for computer input
+function checkSide(){
+	for((i=1;i<8;i=i+2))
+	do
+		if [[ ${board[i]} == $((i+1)) ]]
+		then
+				storeValue $((i))
+		fi
+	done
 }
 
 #Function to check center is available for computer input
@@ -128,6 +141,7 @@ function storeValue(){
 	viewBoard
 	flag=1
 }
+
 #Function to check Rows for Winning
 function checkRowWinning(){
 		checkBlockWin $1 $2 $3
@@ -237,7 +251,6 @@ function checkDiagonal(){
 #StartGame
 checkWhoPlayFirst
 viewBoard
-
 if [[ $user == 'X' ]]
 then
 	userTurn $user $computer
