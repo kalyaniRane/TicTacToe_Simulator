@@ -71,18 +71,28 @@ function computerTurn(){
 	then
 		checkRowWinning $1 $2 "win"
 		checkRowWinning $2 $1 "block"
-	if [[ $flag -eq 0 ]]
-	then
-		checkCorner $1
-		userTurn $2 $1
-	else
+		if [[ $flag -eq 0 ]]
+		then
+			checkCorner $1
 			userTurn $2 $1
-	fi
+			checkCenter $1
+			userTurn $2 $1
+		else
+			userTurn $2 $1
+		fi
 	else
 			echo "Game Over"
 			exit
 	fi
 	viewBoard
+}
+
+#Function to check center is available for computer input
+function checkCenter(){
+	if [[ ${board[4]} -eq 5 ]]
+	then
+			storeValue 4
+	fi
 }
 
 #Function to check corner is available for computer input
