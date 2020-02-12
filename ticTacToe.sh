@@ -73,17 +73,8 @@ function computerTurn(){
 		checkRowWinning $2 $1 "block"
 	if [[ $flag -eq 0 ]]
 	then
-		position=$((RANDOM % 9 + 1))
-		if [[ $(checkValidCell) -eq 1 ]]
-		then
-				board[((position-1))]=$1
-				((counter++))
-				viewBoard
-				checkWin $player
-				userTurn $2 $1
-		else
-				computerTurn $1 $2
-		fi
+		checkCorner $1
+		userTurn $2 $1
 	else
 			userTurn $2 $1
 	fi
@@ -91,7 +82,21 @@ function computerTurn(){
 			echo "Game Over"
 			exit
 	fi
-	ViewBoard
+	viewBoard
+}
+
+#Function to check corner is available for computer input
+function checkCorner(){
+	for((i=0;i<9;i=i+6))
+	do
+		if [[ ${board[i]} == $((i+1)) ]]
+		then
+				storeValue $((i))
+   	elif [[ ${board[i+2]} == $((i+3)) ]]
+		then
+				storeValue $((i+2))
+		fi
+	done
 }
 
 #Function to set a sign for block and win conditions
@@ -120,13 +125,13 @@ function checkRowWinning(){
 		do
 			if [[ ${board[((i))]} == ${board[((i+1))]} && ${board[((i))]} == $1 && ${board[((i+2))]} == $((i+3)) ]]
 			then
-				storeValue $((i+2))				
+					storeValue $((i+2))
 			elif [[ ${board[((i+1))]} == ${board[((i+2))]} &&  ${board[((i+1))]} == $1 && ${board[((i))]} == $((i+1)) ]]
 			then
-				storeValue $((i))
+					storeValue $((i))
 			elif [[ ${board[((i))]} == ${board[((i+2))]} &&  ${board[((i))]} == $1 && ${board[((i+1))]} == $((i+2)) ]]
 			then
-				storeValue $((i+1))
+					storeValue $((i+1))
 			fi
 		done
 		checkWin $player
