@@ -12,6 +12,7 @@ function viewBoard(){
 		echo " ---------"
 	done
 }
+
 #Function to check who play first and assign a symbol to player
 function checkWhoPlayFirst(){
 	if [[ $((RANDOM % 2)) -eq 0 ]]
@@ -24,5 +25,17 @@ function checkWhoPlayFirst(){
 	fi
 }
 
+#Function to check the cell is valid to enter symbol or not
+function checkValidCell(){
+	read -p "Enter a position to mark a sign: " position
+	if [[ ${board[position-1]} -eq $position ]]
+	then
+			viewBoard
+	else
+			echo "Choose another position"
+	fi
+}
+
 #Start Game
 checkWhoPlayFirst
+checkValidCell
